@@ -16,7 +16,6 @@ logger = logging.getLogger(__name__)
 
 class JSONParser:
     """Parse Google Takeout JSON files and extract metadata"""
-    
     def parse(self, json_path: str | Path) -> Optional[Metadata]:
         """
         Parse a Google Takeout JSON file
@@ -49,8 +48,8 @@ class JSONParser:
                     lat = gdata.get("latitude", None)
                     longitude = gdata.get("longitude",None)
                     if lat != 0.0 and longitude != 0.0:
-                        gps = GPSCoordinates(gdata.get("latitude",None)
-                                            ,gdata.get("longitude",None)
+                        gps = GPSCoordinates(lat
+                                            ,longitude
                                             ,gdata.get("altitude",None)
                                             )
                         
@@ -60,6 +59,8 @@ class JSONParser:
                     metadata_obj = Metadata(datetime_original,gps,desc,title,None,None)
 
             except Exception as e:
-                print("Exception in json parser loading the json file." + e)
+                logger.error(f"Failed to parse {json_path}: {e}")
+        else:
+            logger.error(f"Json file not found - {json_path}")
         
         return metadata_obj
