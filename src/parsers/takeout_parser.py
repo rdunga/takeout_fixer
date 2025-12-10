@@ -71,8 +71,9 @@ class TakeoutParser:
         if not self.takeout_dir.is_dir():
             raise ValueError(f"Path is not a directory: {self.takeout_dir}")
         
+        #Just take whatever path is passed in.
         # Find Google Photos folder
-        self.google_photos_dir = self._find_google_photos_dir()
+        self.google_photos_dir =  self.takeout_dir #self._find_google_photos_dir()
         
         logger.info(f"TakeoutParser initialized for: {self.takeout_dir}")
         logger.info(f"Google Photos directory: {self.google_photos_dir}")

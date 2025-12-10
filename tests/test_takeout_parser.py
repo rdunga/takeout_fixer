@@ -9,10 +9,11 @@ from pathlib import Path
 import logging
 
 # Add src directory to path so we can import our modules
-project_root = Path(__file__).parent
-sys.path.insert(0, str(project_root / 'src'))
+# project_root = Path(__file__).parent
+# sys.path.insert(0, str(project_root / 'src'))
 
-from parsers.takeout_parser import TakeoutParser
+from src.parsers.takeout_parser import TakeoutParser
+from src.parsers.json_parser import JSONParser
 
 # Setup nice logging
 logging.basicConfig(
@@ -24,6 +25,8 @@ def main():
     print("=" * 70)
     print("TAKEOUT PARSER - Test Script")
     print("=" * 70)
+
+    test_json_path = None
     
     # TODO: Change this to your actual Takeout path!
     takeout_path = input("\nEnter path to your Takeout folder: ").strip()
@@ -75,6 +78,7 @@ def main():
             print(f"   Path: {media.path.parent.name}/{media.filename}")
             if media.has_json_metadata():
                 print(f"   ✓ JSON: {media.json_path.name}")
+                test_json_path = media.json_path
             else:
                 print(f"   ⚠ No JSON metadata found")
         
@@ -95,6 +99,16 @@ def main():
         print("=" * 70)
         print("\nThe parser is working correctly with your Takeout data.")
         print("Next step: Build the JSON parser to extract metadata from those JSON files.")
+
+        print("\n" + "=" * 70)
+        print("JSON PARSER TEST STARTED")
+        print("\n" + "=" * 70)
+        jp = JSONParser()
+        print(test_json_path)
+        m = jp.parse(test_json_path)
+        print(m)
+
+
         
     except FileNotFoundError as e:
         print(f"\n❌ Error: {e}")
